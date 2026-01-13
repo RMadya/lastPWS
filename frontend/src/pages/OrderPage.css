@@ -1,0 +1,139 @@
+.order-container {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.order-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.order-image-section img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow);
+}
+
+.order-form-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.coffee-category {
+    display: inline-block;
+    background: var(--glass-bg);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.coffee-desc {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.price-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+}
+
+.base-price {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.stock-info {
+    color: var(--text-secondary);
+}
+
+.order-form {
+    background: var(--glass-bg);
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--glass-border);
+}
+
+.size-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.size-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.size-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.size-option span {
+    display: block;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: all var(--transition-base);
+    font-weight: 500;
+}
+
+.size-option:hover span {
+    border-color: var(--primary-light);
+}
+
+.size-option.active span {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    margin: 1.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.total-amount {
+    color: var(--accent);
+    font-size: 1.75rem;
+}
+
+@media (max-width: 768px) {
+    .order-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .order-image-section img {
+        height: 300px;
+    }
+
+    .order-form-section h1 {
+        font-size: 2rem;
+    }
+
+    .size-options {
+        grid-template-columns: 1fr;
+    }
+}

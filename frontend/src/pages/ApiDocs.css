@@ -1,0 +1,181 @@
+.apidocs-container {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.apidocs-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.apidocs-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.apidocs-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.docs-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.doc-section {
+    margin-bottom: 3rem;
+}
+
+.doc-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.doc-section p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.code-block {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.code-block h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.code-block pre,
+.code-block code {
+    font-family: 'Courier New', monospace;
+    color: var(--accent);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+
+.endpoint-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all var(--transition-base);
+}
+
+.endpoint-card:hover {
+    background: var(--bg-card-hover);
+    box-shadow: var(--glass-shadow);
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.method {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.method.get {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.method.post {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--info);
+}
+
+.method.put {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.method.delete {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--error);
+}
+
+.endpoint-header code {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.rate-limit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.rate-card {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.rate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glass-shadow);
+}
+
+.rate-card.premium {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(255, 184, 77, 0.1) 100%);
+}
+
+.rate-card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.rate-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.swagger-link {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.swagger-link h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.swagger-link p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+}
+
+.swagger-link .btn {
+    background: white;
+    color: var(--primary);
+}
+
+.swagger-link .btn:hover {
+    transform: scale(1.05);
+}
