@@ -43,3 +43,105 @@ exports.generateApiKey = async (req, res) => {
     }
 };
 
+/**
+ * Get user's API keys
+ */
+exports.getUserApiKeys = async (req, res) => {
+    try {
+        const userId = req.user.id_user;
+
+        const [keys] = await db.query(
+            `SELECT id, api_key, key_name, tier, is_active, requests_today, 
+              last_request_date, created_at, revoked_at
+       FROM api_keys 
+       WHERE id_user = ?
+       ORDER BY created_at DESC`,
+            [userId]
+        );
+
+        res.json({
+            success: true,
+            count: keys.length,
+            data: keys
+        });
+    } catch (error) {
+        console.error('Get API Keys Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch API keys'
+        });
+    }
+};
+
+/**
+ * Get all API keys (Admin only)
+ */
+exports.getAllApiKeys = async (req, res) => {
+    try {
+        const [keys] = await db.query(
+            `SELECT k.*, u.nama as user_name, u.email as user_email
+       FROM api_keys k
+       JOIN users u ON k.id_user = u.id_user
+       ORDER BY k.created_at DESC`
+        );
+
+        res.json({
+            success: true,
+            count: keys.length,
+            data: keys
+        });
+    } catch (error) {
+        console.error('Get All API Keys Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch API keys'
+        });
+    }
+};
+
+/**
+ * Revoke API key
+ */
+exports.revokeApiKey = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id_user;
+        const isAdmin = req.user.role === 'admin';
+
+        // Check if key exists and belongs to user (or user is admin)
+        let query = 'SELECT * FROM api_keys WHERE id = ?';
+        const params = [id];
+
+        if (!isAdmin) {
+            query += ' AND id_user = ?';
+            params.push(userId);
+        }
+
+        const [keys] = await db.query(query, params);
+
+        if (keys.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'API key not found'
+            });
+        }
+
+        // Revoke key
+        await db.query(
+            'UPDATE api_keys SET is_active = FALSE, revoked_at = NOW() WHERE id = ?',
+            [id]
+        );
+
+        res.json({
+            success: true,
+            message: 'API key revoked successfully'
+        });
+    } catch (error) {
+        console.error('Revoke API Key Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to revoke API key'
+        });
+    }
+};
+
