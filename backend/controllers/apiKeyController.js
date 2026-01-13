@@ -145,3 +145,120 @@ exports.revokeApiKey = async (req, res) => {
     }
 };
 
+/**
+ * Delete API key
+ */
+exports.deleteApiKey = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id_user;
+        const isAdmin = req.user.role === 'admin';
+
+        let query = 'DELETE FROM api_keys WHERE id = ?';
+        const params = [id];
+
+        if (!isAdmin) {
+            query += ' AND id_user = ?';
+            params.push(userId);
+        }
+
+        const [result] = await db.query(query, params);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'API key not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'API key deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete API Key Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete API key'
+        });
+    }
+};
+
+/**
+ * Get API key usage statistics
+ */
+exports.getApiKeyUsage = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id_user;
+        const isAdmin = req.user.role === 'admin';
+
+        // Check if key exists and belongs to user
+        let query = 'SELECT * FROM api_keys WHERE id = ?';
+        const params = [id];
+
+        if (!isAdmin) {
+            query += ' AND id_user = ?';
+            params.push(userId);
+        }
+
+        const [keys] = await db.query(query, params);
+
+        if (keys.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'API key not found'
+            });
+        }
+
+        const keyData = keys[0];
+
+        // Get usage logs
+        const [logs] = await db.query(
+            `SELECT endpoint, method, status_code, COUNT(*) as count
+       FROM api_usage_logs
+       WHERE api_key_id = ?
+       GROUP BY endpoint, method, status_code
+       ORDER BY count DESC`,
+            [id]
+        );
+
+        // Get daily usage for last 7 days
+        const [dailyUsage] = await db.query(
+            `SELECT DATE(request_date) as date, COUNT(*) as requests
+       FROM api_usage_logs
+       WHERE api_key_id = ? AND request_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+       GROUP BY DATE(request_date)
+       ORDER BY date DESC`,
+            [id]
+        );
+
+        // Get total requests
+        const [total] = await db.query(
+            'SELECT COUNT(*) as total_requests FROM api_usage_logs WHERE api_key_id = ?',
+            [id]
+        );
+
+        res.json({
+            success: true,
+            data: {
+                key_info: {
+                    id: keyData.id,
+                    key_name: keyData.key_name,
+                    tier: keyData.tier,
+                    requests_today: keyData.requests_today,
+                    is_active: keyData.is_active
+                },
+                total_requests: total[0].total_requests,
+                daily_usage: dailyUsage,
+                endpoint_usage: logs
+            }
+        });
+    } catch (error) {
+        console.error('Get Usage Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch usage statistics'
+        });
+    }
+};
